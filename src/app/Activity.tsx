@@ -27,12 +27,32 @@ export const Activity = () => {
     };
 
     const [message, setMessage] = useState<string | null>(null);
-    
+
     const [playerIds, setPlayerIds] = useSyncState<string[] | null>(null, ['playerIds', discordSdk.instanceId]);
-    const [player1, setPlayer1] = useSyncState<Player | null>(null, ['player1', discordSdk.instanceId]);
-    const [player2, setPlayer2] = useSyncState<Player | null>(null, ['player2', discordSdk.instanceId]);
-    const [player3, setPlayer3] = useSyncState<Player | null>(null, ['player3', discordSdk.instanceId]);
-    const [player4, setPlayer4] = useSyncState<Player | null>(null, ['player4', discordSdk.instanceId]);
+
+    const [player1Ident, setPlayer1Ident] = useSyncState<{ id: string, username: string, avatar: string } | null>(null, ['player1Ident', discordSdk.instanceId]);
+    const [player1State, setPlayer1State] = useSyncState<{ isPlaying: boolean, joinCooldown: number } | null>(null, ['player1State', discordSdk.instanceId]);
+    const [player1Pos, setPlayer1Pos] = useSyncState<{ x: number, y: number } | null>(null, ['player1Pos', discordSdk.instanceId]);
+    const [player1Bounce, setPlayer1Bounce] = useSyncState<{ xVel: number, yVel: number, bounceCooldown: number } | null>(null, ['player1Bounce', discordSdk.instanceId]);
+    const [player1Age, setPlayer1Age] = useSyncState<number | null>(null, ['player1Age', discordSdk.instanceId]);
+
+    const [player2Ident, setPlayer2Ident] = useSyncState<{ id: string, username: string, avatar: string } | null>(null, ['player2Ident', discordSdk.instanceId]);
+    const [player2State, setPlayer2State] = useSyncState<{ isPlaying: boolean, joinCooldown: number } | null>(null, ['player2State', discordSdk.instanceId]);
+    const [player2Pos, setPlayer2Pos] = useSyncState<{ x: number, y: number } | null>(null, ['player2Pos', discordSdk.instanceId]);
+    const [player2Bounce, setPlayer2Bounce] = useSyncState<{ xVel: number, yVel: number, bounceCooldown: number } | null>(null, ['player2Bounce', discordSdk.instanceId]);
+    const [player2Age, setPlayer2Age] = useSyncState<number | null>(null, ['player2Age', discordSdk.instanceId]);
+
+    const [player3Ident, setPlayer3Ident] = useSyncState<{ id: string, username: string, avatar: string } | null>(null, ['player3Ident', discordSdk.instanceId]);
+    const [player3State, setPlayer3State] = useSyncState<{ isPlaying: boolean, joinCooldown: number } | null>(null, ['player3State', discordSdk.instanceId]);
+    const [player3Pos, setPlayer3Pos] = useSyncState<{ x: number, y: number } | null>(null, ['player3Pos', discordSdk.instanceId]);
+    const [player3Bounce, setPlayer3Bounce] = useSyncState<{ xVel: number, yVel: number, bounceCooldown: number } | null>(null, ['player3Bounce', discordSdk.instanceId]);
+    const [player3Age, setPlayer3Age] = useSyncState<number | null>(null, ['player3Age', discordSdk.instanceId]);
+
+    const [player4Ident, setPlayer4Ident] = useSyncState<{ id: string, username: string, avatar: string } | null>(null, ['player4Ident', discordSdk.instanceId]);
+    const [player4State, setPlayer4State] = useSyncState<{ isPlaying: boolean, joinCooldown: number } | null>(null, ['player4State', discordSdk.instanceId]);
+    const [player4Pos, setPlayer4Pos] = useSyncState<{ x: number, y: number } | null>(null, ['player4Pos', discordSdk.instanceId]);
+    const [player4Bounce, setPlayer4Bounce] = useSyncState<{ xVel: number, yVel: number, bounceCooldown: number } | null>(null, ['player4Bounce', discordSdk.instanceId]);
+    const [player4Age, setPlayer4Age] = useSyncState<number | null>(null, ['player4Age', discordSdk.instanceId]);
 
     const getPlayerId = (): number | null => {
         let playerIndex = playerIds?.indexOf(session.user.id);
@@ -57,19 +77,83 @@ export const Activity = () => {
     const getPlayerById = (id: number): Player | null => {
         switch (id) {
             case 1:
-                return player1;
+                if (!player1Ident?.id) {
+                    return null;
+                }
+
+                return {
+                    id: player1Ident.id,
+                    username: player1Ident.username,
+                    avatar: player1Ident.avatar,
+                    isPlaying: player1State?.isPlaying ?? false,
+                    joinCooldown: player1State?.joinCooldown ?? 3,
+                    xPos: player1Pos?.x ?? 0,
+                    yPos: player1Pos?.y ?? 0,
+                    xVel: player1Bounce?.xVel ?? 0,
+                    yVel: player1Bounce?.yVel ?? 4,
+                    bounceCooldown: player1Bounce?.bounceCooldown ?? 0,
+                    age: player1Age ?? 0
+                };
             case 2:
-                return player2;
+                if (!player2Ident?.id) {
+                    return null;
+                }
+
+                return {
+                    id: player2Ident.id,
+                    username: player2Ident.username,
+                    avatar: player2Ident.avatar,
+                    isPlaying: player2State?.isPlaying ?? false,
+                    joinCooldown: player2State?.joinCooldown ?? 3,
+                    xPos: player2Pos?.x ?? 0,
+                    yPos: player2Pos?.y ?? 0,
+                    xVel: player2Bounce?.xVel ?? 0,
+                    yVel: player2Bounce?.yVel ?? 4,
+                    bounceCooldown: player2Bounce?.bounceCooldown ?? 0,
+                    age: player2Age ?? 0
+                };
             case 3:
-                return player3;
+                if (!player3Ident?.id) {
+                    return null;
+                }
+
+                return {
+                    id: player3Ident.id,
+                    username: player3Ident.username,
+                    avatar: player3Ident.avatar,
+                    isPlaying: player3State?.isPlaying ?? false,
+                    joinCooldown: player3State?.joinCooldown ?? 3,
+                    xPos: player3Pos?.x ?? 0,
+                    yPos: player3Pos?.y ?? 0,
+                    xVel: player3Bounce?.xVel ?? 0,
+                    yVel: player3Bounce?.yVel ?? 4,
+                    bounceCooldown: player3Bounce?.bounceCooldown ?? 0,
+                    age: player3Age ?? 0
+                };
             case 4:
-                return player4;
+                if (!player4Ident?.id) {
+                    return null;
+                }
+
+                return {
+                    id: player4Ident.id,
+                    username: player4Ident.username,
+                    avatar: player4Ident.avatar,
+                    isPlaying: player4State?.isPlaying ?? false,
+                    joinCooldown: player4State?.joinCooldown ?? 3,
+                    xPos: player4Pos?.x ?? 0,
+                    yPos: player4Pos?.y ?? 0,
+                    xVel: player4Bounce?.xVel ?? 0,
+                    yVel: player4Bounce?.yVel ?? 4,
+                    bounceCooldown: player4Bounce?.bounceCooldown ?? 0,
+                    age: player4Age ?? 0
+                };
             default:
                 return null;
         }
     }
 
-    const setPlayer = (player: Player) => {
+    const setPlayerIdent = (player: Player) => {
         let playerId = getPlayerId();
 
         if (!playerId) {
@@ -78,16 +162,116 @@ export const Activity = () => {
 
         switch (playerId) {
             case 1:
-                setPlayer1(player);
+                setPlayer1Ident({ id: player.id, username: player.username, avatar: player.avatar });
                 break;
             case 2:
-                setPlayer2(player);
+                setPlayer2Ident({ id: player.id, username: player.username, avatar: player.avatar });
                 break;
             case 3:
-                setPlayer3(player);
+                setPlayer3Ident({ id: player.id, username: player.username, avatar: player.avatar });
                 break;
             case 4:
-                setPlayer4(player);
+                setPlayer4Ident({ id: player.id, username: player.username, avatar: player.avatar });
+                break;
+            default:
+                break;
+        }
+    };
+
+    const setPlayerState = (player: Player) => {
+        let playerId = getPlayerId();
+
+        if (!playerId) {
+            return;
+        }
+
+        switch (playerId) {
+            case 1:
+                setPlayer1State({ isPlaying: player.isPlaying, joinCooldown: player.joinCooldown });
+                break;
+            case 2:
+                setPlayer2State({ isPlaying: player.isPlaying, joinCooldown: player.joinCooldown });
+                break;
+            case 3:
+                setPlayer3State({ isPlaying: player.isPlaying, joinCooldown: player.joinCooldown });
+                break;
+            case 4:
+                setPlayer4State({ isPlaying: player.isPlaying, joinCooldown: player.joinCooldown });
+                break;
+            default:
+                break;
+        }
+    };
+
+    const setPlayerPos = (player: Player) => {
+        let playerId = getPlayerId();
+
+        if (!playerId) {
+            return;
+        }
+
+        switch (playerId) {
+            case 1:
+                setPlayer1Pos({ x: player.xPos, y: player.yPos });
+                break;
+            case 2:
+                setPlayer2Pos({ x: player.xPos, y: player.yPos });
+                break;
+            case 3:
+                setPlayer3Pos({ x: player.xPos, y: player.yPos });
+                break;
+            case 4:
+                setPlayer4Pos({ x: player.xPos, y: player.yPos });
+                break;
+            default:
+                break;
+        }
+    };
+
+    const setPlayerBounce = (player: Player) => {
+        let playerId = getPlayerId();
+
+        if (!playerId) {
+            return;
+        }
+
+        switch (playerId) {
+            case 1:
+                setPlayer1Bounce({ xVel: player.xVel, yVel: player.yVel, bounceCooldown: player.bounceCooldown });
+                break;
+            case 2:
+                setPlayer2Bounce({ xVel: player.xVel, yVel: player.yVel, bounceCooldown: player.bounceCooldown });
+                break;
+            case 3:
+                setPlayer3Bounce({ xVel: player.xVel, yVel: player.yVel, bounceCooldown: player.bounceCooldown });
+                break;
+            case 4:
+                setPlayer4Bounce({ xVel: player.xVel, yVel: player.yVel, bounceCooldown: player.bounceCooldown });
+                break;
+            default:
+                break;
+        }
+    };
+
+    const setPlayerAge = (player: Player) => {
+        let playerId = getPlayerId();
+
+        if (!playerId) {
+            return;
+        }
+
+        switch (playerId) {
+            case 1:
+                setPlayer1Age(player.age);
+                break;
+            case 2:
+                setPlayer2Age(player.age);
+                break;
+            case 3:
+                setPlayer3Age(player.age);
+                break;
+            case 4:
+                setPlayer4Age(player.age);
                 break;
             default:
                 break;
@@ -111,7 +295,13 @@ export const Activity = () => {
     }
 
     const resetPlayer = () => {
-        setPlayer({ id: session.user.id, username: session.user.username, avatar: session.user.avatar ?? "", isPlaying: false, joinCooldown: 3, xPos: 0, yPos: 0, xVel: 0, yVel: 0, bounceCooldown: 0, age: 0 });
+        let player = { id: session.user.id, username: session.user.username, avatar: session.user.avatar ?? "", isPlaying: false, joinCooldown: 3, xPos: 0, yPos: 0, xVel: 0, yVel: 0, bounceCooldown: 0, age: 0 };
+
+        setPlayerIdent(player);
+        setPlayerState(player);
+        setPlayerPos(player);
+        setPlayerBounce(player);
+        setPlayerAge(player);
     }
 
     const getBigBub = (): number | null => {
@@ -172,24 +362,6 @@ export const Activity = () => {
         initPlayer();
     }, [session, playerIds])
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            let player = getPlayer();
-            if (!player) {
-                return;
-            }
-    
-            if (!player.isPlaying) {
-                return;
-            }
-
-            player.age = player.age + 1;
-            setPlayer(player);
-        }, 1000);
-
-        return () => clearInterval(interval);
-    }, [playerIds, player1?.isPlaying, player2?.isPlaying, player3?.isPlaying, player4?.isPlaying]);
-
     //cooldown to join/rejoin game
     useEffect(() => {
         const interval = setInterval(() => {
@@ -197,15 +369,15 @@ export const Activity = () => {
             if (!player) {
                 return;
             }
-            
+
             if (player.joinCooldown > 0) {
                 player.joinCooldown = player.joinCooldown - 1;
-                setPlayer(player);
+                setPlayerState(player);
             }
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [playerIds, player1, player2, player3, player4]);
+    }, [playerIds, player1State, player2State, player3State, player4State]);
 
     //physics
     useEffect(() => {
@@ -217,12 +389,14 @@ export const Activity = () => {
             if (player.isPlaying) {
                 player.xPos = player.xPos + player.xVel;
                 player.yPos = player.yPos + player.yVel;
-                setPlayer(player);
+                player.age = player.age + 1;
+                setPlayerAge(player);
+                setPlayerPos(player);
             }
         }, 33);
 
         return () => clearInterval(interval);
-    }, [playerIds, player1, player2, player3, player4]);
+    }, [playerIds, player1Pos, player1Bounce, player1State, player2Pos, player2Bounce, player2State, player3Pos, player3Bounce, player3State, player4Pos, player4Bounce, player4State]);
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -247,7 +421,7 @@ export const Activity = () => {
                 player.xVel = deltaX * 5 / magnitude;
                 player.yVel = deltaY * 5 / magnitude;
 
-                setPlayer(player);
+                setPlayerBounce(player);
             }
             else if (!player.joinCooldown) {
                 player.isPlaying = true;
@@ -258,7 +432,9 @@ export const Activity = () => {
                 player.yVel = 4;
                 player.bounceCooldown = 0;
 
-                setPlayer(player);
+                setPlayerPos(player);
+                setPlayerBounce(player);
+                setPlayerState(player);
             }
         };
 
@@ -267,7 +443,7 @@ export const Activity = () => {
         return () => {
             canvas.removeEventListener("click", handleClick);
         }
-    }, [playerIds, player1, player2, player3, player4]);
+    }, [playerIds, player1Bounce, player1State, player2Bounce, player2State, player3Bounce, player3State, player4Bounce, player4State]);
 
     //draw all players' bubbles
     useEffect(() => {
@@ -305,7 +481,7 @@ export const Activity = () => {
                 }
             }
         }
-    }, [playerIds, player1, player2, player3, player4]);
+    }, [playerIds, player1Ident, player1State, player1Pos, player2Ident, player2State, player2Pos, player3Ident, player3State, player3Pos, player4Ident, player4State, player4Pos]);
 
     useEffect(() => {
         let player = getPlayer();
@@ -317,7 +493,7 @@ export const Activity = () => {
             setMessage("You died!");
             resetPlayer();
         }
-    }, [playerIds, player1, player2, player3, player4]);
+    }, [playerIds, player1Pos, player2Pos, player3Pos, player4Pos]);
 
     useEffect(() => {
         let playerId = getPlayerId();
@@ -347,7 +523,7 @@ export const Activity = () => {
 
             setMessage(`${bigBubPlayer.username} is the Big Bub`);
         }
-    }, [playerIds, player1, player2, player3, player4]);
+    }, [playerIds, player1Age, player2Age, player3Age, player4Age]);
 
     return (
         <div>
@@ -362,16 +538,16 @@ export const Activity = () => {
                 Cooldown: {getPlayer()?.joinCooldown ?? 1 > 0 ? getPlayer()?.joinCooldown : 'Ready'}
             </div>
             <div>
-                Player 1: {player1?.username}
+                Player 1: {player1Ident?.username}
             </div>
             <div>
-                Player 2: {player2?.username}
+                Player 2: {player2Ident?.username}
             </div>
             <div>
-                Player 3: {player3?.username}
+                Player 3: {player3Ident?.username}
             </div>
             <div>
-                Player 4: {player4?.username}
+                Player 4: {player4Ident?.username}
             </div>
         </div>
     )
