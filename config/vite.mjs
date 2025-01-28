@@ -7,7 +7,7 @@ export default defineConfig({
 	plugins: [react(), DiscordProxy.Vite()],
 	server: {
 		allowedHosts: [
-			"allocated-taxation-consistent-morrison.trycloudflare.com"
+			"microphone-to-quotations-vitamins.trycloudflare.com"
 		]
 	}
 })

@@ -445,8 +445,25 @@ export const Activity = () => {
         }
     }, [playerIds, player1Bounce, player1State, player2Bounce, player2State, player3Bounce, player3State, player4Bounce, player4State]);
 
-    //draw all players' bubbles
+    const requestRef = useRef<number>(null);
+    const bubbleImage = useRef<HTMLImageElement | null>(null);
+    const avatarImages = useRef<Record<string, HTMLImageElement>>({});
+
     useEffect(() => {
+        bubbleImage.current = new Image(32, 32);
+        bubbleImage.current.src = "/bubble.png";
+
+        for (let i = 1; i <= 4; i++) {
+            const player = getPlayerById(i);
+            if (player?.avatar && !avatarImages.current[i]) {
+                const img = new Image(24, 24);
+                img.src = `https://cdn.discordapp.com/avatars/${player.id}/${player.avatar}`;
+                avatarImages.current[i] = img;
+            }
+        }
+    }, [playerIds, player1Ident, player2Ident, player3Ident, player4Ident]);
+
+    const draw = () => {
         const canvas = canvasRef.current;
         if (!canvas) {
             return;
@@ -463,25 +480,32 @@ export const Activity = () => {
         for (let i = 1; i <= 4; i++) {
             let player = getPlayerById(i);
             if (player?.isPlaying) {
-                const bubbleImage = new Image(32, 32);
-                bubbleImage.onload = () => {
-                    context.drawImage(bubbleImage, player.xPos - 16, player.yPos - 16);
-                };
-                bubbleImage.src = "/bubble.png";
+                if (bubbleImage.current) {
+                    context.drawImage(bubbleImage.current, player.xPos - 16, player.yPos - 16);
+                }
 
-                if (player?.avatar) {
-                    const avatarImage = new Image(24, 24);
-                    avatarImage.onload = () => {
-                        context.save();
-                        context.globalAlpha = 0.5;
-                        context.drawImage(avatarImage, player.xPos - 12, player.yPos - 12, 24, 24);
-                        context.restore();
-                    }
-                    avatarImage.src = `https://cdn.discordapp.com/avatars/${player.id}/${player.avatar}`;
+                const avatar = avatarImages.current[i];
+                if (avatar) {
+                    context.save();
+                    context.globalAlpha = 0.5;
+                    context.drawImage(avatar, player.xPos - 12, player.yPos - 12, 24, 24);
+                    context.restore();
                 }
             }
         }
-    }, [playerIds, player1Ident, player1State, player1Pos, player2Ident, player2State, player2Pos, player3Ident, player3State, player3Pos, player4Ident, player4State, player4Pos]);
+
+        requestRef.current = requestAnimationFrame(draw);
+    };
+
+    //draw all players' bubbles
+    useEffect(() => {
+        requestRef.current = requestAnimationFrame(draw);
+        return () => {
+            if (requestRef.current) {
+                cancelAnimationFrame(requestRef.current);
+            }
+        }
+    }, [playerIds, player1Ident, player1State, player1Pos, player2Ident, player2State, player2Pos, player3Ident, player3State, player3Pos, player4Ident, player4State, player4Pos]);//[player1Ident?.avatar, player2Ident?.avatar, player3Ident?.avatar, player4Ident?.avatar]);
 
     useEffect(() => {
         let player = getPlayer();
