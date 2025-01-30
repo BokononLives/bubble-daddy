@@ -13,6 +13,7 @@ export const Activity = () => {
     }
 
     interface Player {
+        ordinal: number,
         id: string,
         username: string,
         avatar: string,
@@ -23,6 +24,7 @@ export const Activity = () => {
         xVel: number,
         yVel: number,
         bounceCooldown: number,
+        clickCooldown: number,
         age: number
     };
 
@@ -33,25 +35,25 @@ export const Activity = () => {
     const [player1Ident, setPlayer1Ident] = useSyncState<{ id: string, username: string, avatar: string } | null>(null, ['player1Ident', discordSdk.instanceId]);
     const [player1State, setPlayer1State] = useSyncState<{ isPlaying: boolean, joinCooldown: number } | null>(null, ['player1State', discordSdk.instanceId]);
     const [player1Pos, setPlayer1Pos] = useSyncState<{ x: number, y: number } | null>(null, ['player1Pos', discordSdk.instanceId]);
-    const [player1Bounce, setPlayer1Bounce] = useSyncState<{ xVel: number, yVel: number, bounceCooldown: number } | null>(null, ['player1Bounce', discordSdk.instanceId]);
+    const [player1Bounce, setPlayer1Bounce] = useSyncState<{ xVel: number, yVel: number, bounceCooldown: number, clickCooldown: number } | null>(null, ['player1Bounce', discordSdk.instanceId]);
     const [player1Age, setPlayer1Age] = useSyncState<number | null>(null, ['player1Age', discordSdk.instanceId]);
 
     const [player2Ident, setPlayer2Ident] = useSyncState<{ id: string, username: string, avatar: string } | null>(null, ['player2Ident', discordSdk.instanceId]);
     const [player2State, setPlayer2State] = useSyncState<{ isPlaying: boolean, joinCooldown: number } | null>(null, ['player2State', discordSdk.instanceId]);
     const [player2Pos, setPlayer2Pos] = useSyncState<{ x: number, y: number } | null>(null, ['player2Pos', discordSdk.instanceId]);
-    const [player2Bounce, setPlayer2Bounce] = useSyncState<{ xVel: number, yVel: number, bounceCooldown: number } | null>(null, ['player2Bounce', discordSdk.instanceId]);
+    const [player2Bounce, setPlayer2Bounce] = useSyncState<{ xVel: number, yVel: number, bounceCooldown: number, clickCooldown: number } | null>(null, ['player2Bounce', discordSdk.instanceId]);
     const [player2Age, setPlayer2Age] = useSyncState<number | null>(null, ['player2Age', discordSdk.instanceId]);
 
     const [player3Ident, setPlayer3Ident] = useSyncState<{ id: string, username: string, avatar: string } | null>(null, ['player3Ident', discordSdk.instanceId]);
     const [player3State, setPlayer3State] = useSyncState<{ isPlaying: boolean, joinCooldown: number } | null>(null, ['player3State', discordSdk.instanceId]);
     const [player3Pos, setPlayer3Pos] = useSyncState<{ x: number, y: number } | null>(null, ['player3Pos', discordSdk.instanceId]);
-    const [player3Bounce, setPlayer3Bounce] = useSyncState<{ xVel: number, yVel: number, bounceCooldown: number } | null>(null, ['player3Bounce', discordSdk.instanceId]);
+    const [player3Bounce, setPlayer3Bounce] = useSyncState<{ xVel: number, yVel: number, bounceCooldown: number, clickCooldown: number } | null>(null, ['player3Bounce', discordSdk.instanceId]);
     const [player3Age, setPlayer3Age] = useSyncState<number | null>(null, ['player3Age', discordSdk.instanceId]);
 
     const [player4Ident, setPlayer4Ident] = useSyncState<{ id: string, username: string, avatar: string } | null>(null, ['player4Ident', discordSdk.instanceId]);
     const [player4State, setPlayer4State] = useSyncState<{ isPlaying: boolean, joinCooldown: number } | null>(null, ['player4State', discordSdk.instanceId]);
     const [player4Pos, setPlayer4Pos] = useSyncState<{ x: number, y: number } | null>(null, ['player4Pos', discordSdk.instanceId]);
-    const [player4Bounce, setPlayer4Bounce] = useSyncState<{ xVel: number, yVel: number, bounceCooldown: number } | null>(null, ['player4Bounce', discordSdk.instanceId]);
+    const [player4Bounce, setPlayer4Bounce] = useSyncState<{ xVel: number, yVel: number, bounceCooldown: number, clickCooldown: number } | null>(null, ['player4Bounce', discordSdk.instanceId]);
     const [player4Age, setPlayer4Age] = useSyncState<number | null>(null, ['player4Age', discordSdk.instanceId]);
 
     const getPlayerId = (): number | null => {
@@ -82,6 +84,7 @@ export const Activity = () => {
                 }
 
                 return {
+                    ordinal: 1,
                     id: player1Ident.id,
                     username: player1Ident.username,
                     avatar: player1Ident.avatar,
@@ -92,6 +95,7 @@ export const Activity = () => {
                     xVel: player1Bounce?.xVel ?? 0,
                     yVel: player1Bounce?.yVel ?? 4,
                     bounceCooldown: player1Bounce?.bounceCooldown ?? 0,
+                    clickCooldown: player1Bounce?.clickCooldown ?? 0,
                     age: player1Age ?? 0
                 };
             case 2:
@@ -100,6 +104,7 @@ export const Activity = () => {
                 }
 
                 return {
+                    ordinal: 2,
                     id: player2Ident.id,
                     username: player2Ident.username,
                     avatar: player2Ident.avatar,
@@ -110,6 +115,7 @@ export const Activity = () => {
                     xVel: player2Bounce?.xVel ?? 0,
                     yVel: player2Bounce?.yVel ?? 4,
                     bounceCooldown: player2Bounce?.bounceCooldown ?? 0,
+                    clickCooldown: player2Bounce?.clickCooldown ?? 0,
                     age: player2Age ?? 0
                 };
             case 3:
@@ -118,6 +124,7 @@ export const Activity = () => {
                 }
 
                 return {
+                    ordinal: 3,
                     id: player3Ident.id,
                     username: player3Ident.username,
                     avatar: player3Ident.avatar,
@@ -128,6 +135,7 @@ export const Activity = () => {
                     xVel: player3Bounce?.xVel ?? 0,
                     yVel: player3Bounce?.yVel ?? 4,
                     bounceCooldown: player3Bounce?.bounceCooldown ?? 0,
+                    clickCooldown: player3Bounce?.clickCooldown ?? 0,
                     age: player3Age ?? 0
                 };
             case 4:
@@ -136,6 +144,7 @@ export const Activity = () => {
                 }
 
                 return {
+                    ordinal: 4,
                     id: player4Ident.id,
                     username: player4Ident.username,
                     avatar: player4Ident.avatar,
@@ -146,6 +155,7 @@ export const Activity = () => {
                     xVel: player4Bounce?.xVel ?? 0,
                     yVel: player4Bounce?.yVel ?? 4,
                     bounceCooldown: player4Bounce?.bounceCooldown ?? 0,
+                    clickCooldown: player4Bounce?.clickCooldown ?? 0,
                     age: player4Age ?? 0
                 };
             default:
@@ -295,7 +305,7 @@ export const Activity = () => {
     }
 
     const resetPlayer = () => {
-        let player = { id: session.user.id, username: session.user.username, avatar: session.user.avatar ?? "", isPlaying: false, joinCooldown: 3, xPos: 0, yPos: 0, xVel: 0, yVel: 0, bounceCooldown: 0, age: 0 };
+        let player = { ordinal: 0, id: session.user.id, username: session.user.username, avatar: session.user.avatar ?? "", isPlaying: false, joinCooldown: 3, xPos: 0, yPos: 0, xVel: 0, yVel: 0, bounceCooldown: 0, clickCooldown: 0, age: 0 };
 
         setPlayerIdent(player);
         setPlayerState(player);
@@ -387,9 +397,53 @@ export const Activity = () => {
                 return;
             }
             if (player.isPlaying) {
+                if (player.bounceCooldown <= 0) {
+                    for (let i = 1; i <= 4; i++) {
+                        if (player.ordinal != i) {
+                            let otherPlayer = getPlayerById(i);
+                            if (otherPlayer?.isPlaying) {
+                                const deltaX = player.xPos - otherPlayer.xPos;
+                                const deltaY = player.yPos - otherPlayer.yPos;
+                                const magnitude = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+    
+                                if (magnitude <= 12) {
+                                    player.xVel = deltaX * 5 / magnitude;
+                                    player.yVel = deltaY * 5 / magnitude;
+                                    player.bounceCooldown = 6;
+                                    setPlayerBounce(player);
+    
+                                    otherPlayer.xVel = deltaX * -5 / magnitude;
+                                    otherPlayer.yVel = deltaY * -5 / magnitude;
+                                    otherPlayer.bounceCooldown = 6;
+                                    switch (i) {
+                                        case 1:
+                                            setPlayer1Bounce(otherPlayer);
+                                            break;
+                                        case 2:
+                                            setPlayer2Bounce(otherPlayer);
+                                            break;
+                                        case 3:
+                                            setPlayer3Bounce(otherPlayer);
+                                            break;
+                                        case 4:
+                                            setPlayer4Bounce(otherPlayer);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 player.xPos = player.xPos + player.xVel;
                 player.yPos = player.yPos + player.yVel;
                 player.age = player.age + 1;
+                if (player.bounceCooldown > 0) {
+                    player.bounceCooldown = player.bounceCooldown - 1;
+                    setPlayerBounce(player);
+                }
                 setPlayerAge(player);
                 setPlayerPos(player);
             }
@@ -414,14 +468,17 @@ export const Activity = () => {
             }
 
             if (player.isPlaying) {
-                const deltaX = player.xPos - event.offsetX;
-                const deltaY = player.yPos - event.offsetY;
-                const magnitude = Math.sqrt(deltaX ** 2 + deltaY ** 2);
-
-                player.xVel = deltaX * 5 / magnitude;
-                player.yVel = deltaY * 5 / magnitude;
-
-                setPlayerBounce(player);
+                if (player.clickCooldown <= 0 && player.bounceCooldown <= 0) {
+                    const deltaX = player.xPos - event.offsetX;
+                    const deltaY = player.yPos - event.offsetY;
+                    const magnitude = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+    
+                    player.xVel = deltaX * 5 / magnitude;
+                    player.yVel = deltaY * 5 / magnitude;
+                    player.clickCooldown = 6;
+    
+                    setPlayerBounce(player);
+                }
             }
             else if (!player.joinCooldown) {
                 player.isPlaying = true;
@@ -431,6 +488,7 @@ export const Activity = () => {
                 player.xVel = 0;
                 player.yVel = 4;
                 player.bounceCooldown = 0;
+                player.clickCooldown = 0;
 
                 setPlayerPos(player);
                 setPlayerBounce(player);
@@ -527,6 +585,10 @@ export const Activity = () => {
 
         let player = getPlayer();
         if (!player) {
+            return;
+        }
+
+        if (!player.isPlaying) {
             return;
         }
 

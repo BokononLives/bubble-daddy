@@ -7,7 +7,7 @@ export default defineConfig({
 	plugins: [react(), DiscordProxy.Vite()],
 	server: {
 		allowedHosts: [
-			"microphone-to-quotations-vitamins.trycloudflare.com"
+			"enjoyed-base-atlanta-delete.trycloudflare.com"
 		]
 	}
 })
